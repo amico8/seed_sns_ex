@@ -1,3 +1,27 @@
+<?php
+// $_POSTでデータが送られてきたら処理する
+if (isset($_POST) && !empty($_POST)) {
+
+  // 必須入力のチェック
+  if ($_POST['nick_name'] == '') {
+    $error['nick_name'] = 'blank';
+  }
+  if ($_POST['email'] == '') {
+    $error['email'] = 'blank';
+  }
+  if ($_POST['password'] == '') {
+    $error['password'] = 'blank';
+  } else if (strlen($_POST['password']) < 4) {
+    // パスワード文字数のチェック
+    // strlen()関数・・・文字数を取得する関数
+    $error['password'] = 'length';
+  }
+
+  // エラーがなかったら処理する
+  if (empty($error)) {
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
