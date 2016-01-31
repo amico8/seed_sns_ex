@@ -1,4 +1,8 @@
 <?php
+// セッションの初期化
+// セッションを使うページでは全てにこの記述を入れる
+session_start();
+
 // $_POSTでデータが送られてきたら処理する
 if (isset($_POST) && !empty($_POST)) {
 
@@ -26,13 +30,21 @@ if (isset($_POST) && !empty($_POST)) {
     }
   }
 
-
   // エラーがなかったら処理する
   if (empty($error)) {
     // 画像のアップロード
     // ファイル名の前に、アップロードした日時を入れる
     $picture_path = date('YmdHis') . $fileName;
     move_uploaded_file($_FILES['picture_path']['tmp_name'], '../member_picture/' . $picture_path);
+
+    // スーパーグローバル変数$_SESSIONにjoinという名前の場所を作り、そこに$_POSTの内容を入れる
+    $_SESSION['join'] = $_POST;
+    $_SESSION['join']['picture_path'] = $picture_path;
+
+    // check.phpへ遷移
+    header('Location: check.php');
+    // これ以下のコードを無駄に処理しないように終了する
+    exit();
   }
 }
 ?>
