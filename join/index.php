@@ -81,7 +81,12 @@ if (isset($_POST) && !empty($_POST)) {
           <div class="form-group">
             <label class="col-sm-4 control-label">ニックネーム</label>
             <div class="col-sm-8">
-              <input type="text" name="nick_name" class="form-control" placeholder="例： Seed kun">
+              <?php if (isset($_POST['nick_name'])) {
+                echo sprintf('<input type="text" name="nick_name" class="form-control" placeholder="例： Seed kun" value="%s">',
+                  htmlspecialchars($_POST['nick_name'], ENT_QUOTES, 'UTF-8'));
+              } else {
+                echo '<input type="text" name="nick_name" class="form-control" placeholder="例： Seed kun" value="">';
+              } ?>
               <?php if(isset($error['nick_name']) && $error['nick_name'] == 'blank'): ?>
               <p class="error">* ニックネームを入力してください。</p>
               <?php endif; ?>
