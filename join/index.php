@@ -47,6 +47,13 @@ if (isset($_POST) && !empty($_POST)) {
     exit();
   }
 }
+
+// 書き直し
+// $_REQUEST() $_GET, $_POST, $_COOKIEのデータが入っている
+if (isset($_GET['action']) && $_GET['action'] == 'rewrite') {
+  $_POST = $_SESSION['join'];
+  $error['rewrite'] = true;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">

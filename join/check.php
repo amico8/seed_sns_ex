@@ -88,7 +88,7 @@ if (!isset($_SESSION['join'])) {
               </tbody>
             </table>
 
-            <a href="index.html">&laquo;&nbsp;書き直す</a> | 
+            <a href="index.php?action=rewrite">&laquo;&nbsp;書き直す</a> | 
             <input type="button" class="btn btn-default" value="会員登録">
           </div>
         </form>
