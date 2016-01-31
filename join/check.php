@@ -1,11 +1,30 @@
 <?php
 session_start();
+// dbconnect.php読込
+require('../dbconnect.php');
 
 // セッション情報がなかったら、index.phpへ戻るようにする
 if (!isset($_SESSION['join'])) {
   header('Location: index.php');
   exit();
 }
+
+if (!empty($_POST)) {
+  // 登録処理をする
+  $sql = sprintf('INSERT INTO `members` SET nick_name="%s", email="%s", password="%s", picture_path="%s", created=now()',
+      mysqli_real_escape_string($db, $_SESSION['join']['nick_name']),
+      mysqli_real_escape_string($db, $_SESSION['join']['email']),
+      mysqli_real_escape_string($db, sha1($_SESSION['join']['password'])),
+      mysqli_real_escape_string($db, $_SESSION['join']['picture_path']));
+
+  mysqli_query($db,$sql) or die(mysqli_error($db));
+  // DBに登録したので、セッション情報を削除
+  unset($_SESSION['join']);
+
+  header('Location: thanks.php');
+  exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -89,7 +108,7 @@ if (!isset($_SESSION['join'])) {
             </table>
 
             <a href="index.php?action=rewrite">&laquo;&nbsp;書き直す</a> | 
-            <input type="button" class="btn btn-default" value="会員登録">
+            <input type="submit" class="btn btn-default" value="会員登録">
           </div>
         </form>
       </div>
