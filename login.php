@@ -64,7 +64,14 @@
               <input type="password" name="password" class="form-control" placeholder="">
             </div>
           </div>
-          <input type="submit" class="btn btn-default" value="ログイン">
+          <!-- 自動ログイン -->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">自動ログイン</label>
+            <div class="col-sm-8">
+              <input type="checkbox" id="save" name="save" value="on">
+            </div>
+          </div>
+          <input type="submit" class="btn btn-info" value="ログイン"> | <a href="join/" class="btn btn-default">&raquo; 会員登録</a>
         </form>
       </div>
     </div>
