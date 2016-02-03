@@ -23,6 +23,14 @@ if (isset($_POST) && !empty($_POST)) {
       $_SESSION['member_id'] = $table['member_id'];
       // ログインした時間をセッションに保存
       $_SESSION['time'] = time();
+
+      // 自動ログインのチェックボックスにチェックがあったら、ログイン情報をCookieに記録する
+      // 有効期限は14日間
+      if ($_POST['save'] == 'on') {
+        setcookie('email', $_POST['email'], time()+60*60*24*14);
+        setcookie('password', $_POST['password'], time()+60*60*24*14);
+      }
+
       // index.phpへ遷移
       header('Location: index.php');
       exit();
