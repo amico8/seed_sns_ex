@@ -21,6 +21,22 @@ if (isset($_SESSION['member_id']) && $_SESSION['time'] + 3600 > time()) {
   exit();
 }
 
+// 投稿するボタンクリック時
+if (!empty($_POST)) {
+  // つぶやきが空じゃなかったらDBに登録
+  if ($_POST['tweet'] != '') {
+    $sql = sprintf('INSERT INTO `tweets` SET `tweet`="%s",`member_id`=%d,`created`=now()',
+    mysqli_real_escape_string($db, $_POST['tweet']),
+    mysqli_real_escape_string($db, $member['member_id'])
+    );
+
+    mysqli_query($db, $sql) or die(mysqli_error());
+    // リロードでの重複登録を防ぐ
+    header('Location: index.php');
+    exit();
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
