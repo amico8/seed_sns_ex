@@ -33,11 +33,12 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="index.php"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
+              <a class="navbar-brand" href="index.html"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right">
+                <li><a href="logout.html">ログアウト</a></li>
               </ul>
           </div>
           <!-- /.navbar-collapse -->
@@ -54,10 +55,16 @@
             <div class="form-group">
               <label class="col-sm-4 control-label">つぶやき</label>
               <div class="col-sm-8">
-                <input type="text" name="age" class="form-control" placeholder="例：Hello World!">
+                <textarea name="tweet" cols="50" rows="5" class="form-control" placeholder="例：Hello World!"></textarea>
               </div>
             </div>
-          <input type="submit" class="btn btn-default" value="つぶやく">
+          <ul class="paging">
+            <input type="submit" class="btn btn-info" value="つぶやく">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <li><a href="index.html" class="btn btn-default">前</a></li>
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <li><a href="index.html" class="btn btn-default">次</a></li>
+          </ul>
         </form>
       </div>
 
@@ -69,10 +76,9 @@
             [<a href="#">Re</a>]
           </p>
           <p class="day">
-            <a href="#">
+            <a href="view.html">
               2016-01-28 18:04
             </a>
-            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
         <div class="msg">
@@ -82,10 +88,9 @@
             [<a href="#">Re</a>]
           </p>
           <p class="day">
-            <a href="#">
+            <a href="view.html">
               2016-01-28 18:03
             </a>
-            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
         <div class="msg">
@@ -95,10 +100,9 @@
             [<a href="#">Re</a>]
           </p>
           <p class="day">
-            <a href="#">
+            <a href="view.html">
               2016-01-28 18:02
             </a>
-            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
         <div class="msg">
@@ -108,10 +112,9 @@
             [<a href="#">Re</a>]
           </p>
           <p class="day">
-            <a href="#">
+            <a href="view.html">
               2016-01-28 18:01
             </a>
-            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
       </div>
