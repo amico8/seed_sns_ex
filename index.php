@@ -4,8 +4,16 @@ session_start();
 require('dbconnect.php');
 
 // ログイン中の条件
-// セッションにIDが入っている・ログインした時間が1時間以内
-if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
+// セッションにmember_idが入っている・ログインした時間が1時間以内
+if (isset($_SESSION['member_id']) && $_SESSION['time'] + 3600 > time()) {
+  // セッションの時間を更新
+  $_SESSION['time'] = time();
+  // 名前を表示させるため実行
+  $sql = sprintf('SELECT * FROM `members` WHERE `member_id` = %d',
+   mysqli_real_escape_string($db, $_SESSION['member_id']));
+
+  $record = mysqli_query($db, $sql) or die(mysqli_error());
+  $member = mysqli_fetch_assoc($record);
 
 } else {
   // ログインしてないのでログインページヘ
@@ -65,7 +73,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
   <div class="container">
     <div class="row">
       <div class="col-md-4 content-margin-top">
-        <legend>ようこそ●●さん！</legend>
+        <legend>ようこそ <?php echo htmlspecialchars($member['nick_name']); ?>さん！</legend>
         <form method="post" action="" class="form-horizontal" role="form">
             <!-- つぶやき -->
             <div class="form-group">
