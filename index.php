@@ -119,6 +119,8 @@ if (!empty($_POST)) {
             <a href="view.html">
               2016-01-28 18:04
             </a>
+            [<a href="#" style="color: #00994C;">編集</a>]
+            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
         <div class="msg">
@@ -131,6 +133,8 @@ if (!empty($_POST)) {
             <a href="view.html">
               2016-01-28 18:03
             </a>
+            [<a href="#" style="color: #00994C;">編集</a>]
+            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
         <div class="msg">
@@ -143,6 +147,8 @@ if (!empty($_POST)) {
             <a href="view.html">
               2016-01-28 18:02
             </a>
+            [<a href="#" style="color: #00994C;">編集</a>]
+            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
         <div class="msg">
@@ -155,6 +161,8 @@ if (!empty($_POST)) {
             <a href="view.html">
               2016-01-28 18:01
             </a>
+            [<a href="#" style="color: #00994C;">編集</a>]
+            [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
       </div>
