@@ -1,10 +1,21 @@
 <?php
+require('dbconnect.php');
+session_start();
+
 $error = array();
 
 // POSTでデータが送られてきたら処理する
 if (isset($_POST) && !empty($_POST)) {
   if ($_POST['email'] != '' && $_POST['password'] != '') {
-    // 正常処理
+    // ログイン処理
+    // SQL作成
+    $sql = sprintf('SELECT * FROM `members` WHERE `email` = "%s" AND `password` = "%s"',
+      mysqli_real_escape_string($db, $_POST['email']),
+      mysqli_real_escape_string($db, sha1($_POST['password']))
+      );
+    // SQL実行.実行結果が$recordに入る
+    $record = mysqli_query($db, $sql) or die(mysqli_error($db));
+
   } else {
     // 必須エラー
     $error['login'] = 'blank';
