@@ -15,6 +15,21 @@ if (isset($_POST) && !empty($_POST)) {
       );
     // SQL実行.実行結果が$recordに入る
     $record = mysqli_query($db, $sql) or die(mysqli_error($db));
+    // $recordはこのままでは使えないので、mysqli_fetch_assoc()関数を使う
+    // mysqli_fetch_assoc()は、1件のデータを取り出して連想配列にしてくれる
+    if ($table = mysqli_fetch_assoc($record)) {
+      // ログイン成功
+      // IDをセッションに保存
+      $_SESSION['member_id'] = $table['member_id'];
+      // ログインした時間をセッションに保存
+      $_SESSION['time'] = time();
+      // index.phpへ遷移
+      header('Location: index.php');
+      exit();
+
+    } else {
+      $error['login'] = 'failed';
+    }
 
   } else {
     // 必須エラー
@@ -86,6 +101,9 @@ if (isset($_POST) && !empty($_POST)) {
             } ?>
             <?php if(isset($error['login']) && $error['login'] == 'blank'): ?>
               <p class="error">* メールアドレスとパスワードをご記入ください。</p>
+            <?php endif; ?>
+            <?php if(isset($error['login']) && $error['login'] == 'failed'): ?>
+              <p class="error">* ログインに失敗しました。正しくご記入ください。</p>
             <?php endif; ?>
             </div>
           </div>
