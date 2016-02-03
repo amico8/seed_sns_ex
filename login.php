@@ -4,6 +4,13 @@ session_start();
 
 $error = array();
 
+// もしCookieにemailのデータが入っていたら、フォームに設定する
+if (isset($_COOKIE['email']) &&$_COOKIE['email'] != '') {
+  $_POST['email'] = $_COOKIE['email'];
+  $_POST['password'] = $_COOKIE['password'];
+  $_POST['save'] = 'on';
+}
+
 // POSTでデータが送られてきたら処理する
 if (isset($_POST) && !empty($_POST)) {
   if ($_POST['email'] != '' && $_POST['password'] != '') {
