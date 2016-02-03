@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+require('dbconnect.php');
+
+// ログイン中の条件
+// セッションにIDが入っている・ログインした時間が1時間以内
+if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
+
+} else {
+  // ログインしてないのでログインページヘ
+  header('Location: login.php');
+  exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
