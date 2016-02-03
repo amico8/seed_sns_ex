@@ -1,3 +1,16 @@
+<?php
+$error = array();
+
+// POSTでデータが送られてきたら処理する
+if (isset($_POST) && !empty($_POST)) {
+  if ($_POST['email'] != '' && $_POST['password'] != '') {
+    // 正常処理
+  } else {
+    // 必須エラー
+    $error['login'] = 'blank';
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -54,14 +67,27 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">メールアドレス</label>
             <div class="col-sm-8">
-              <input type="email" name="email" class="form-control" placeholder="例： seed@nex.com">
+            <?php if (isset($_POST['email'])) {
+              echo sprintf('<input type="email" name="email" class="form-control" placeholder="例： seed@nex.com" value="%s">',
+               htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8'));
+            } else {
+              echo '<input type="email" name="email" class="form-control" placeholder="例： seed@nex.com" value="">';
+            } ?>
+            <?php if(isset($error['login']) && $error['login'] == 'blank'): ?>
+              <p class="error">* メールアドレスとパスワードをご記入ください。</p>
+            <?php endif; ?>
             </div>
           </div>
           <!-- パスワード -->
           <div class="form-group">
             <label class="col-sm-4 control-label">パスワード</label>
             <div class="col-sm-8">
-              <input type="password" name="password" class="form-control" placeholder="">
+            <?php if (isset($_POST['password']) && $_POST['password']) {
+              echo sprintf('<input type="password" name="password" class="form-control" placeholder="" value="%s">',
+               htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
+            } else {
+              echo '<input type="password" name="password" class="form-control" placeholder="" value="">';
+            }?>
             </div>
           </div>
           <!-- 自動ログイン -->
