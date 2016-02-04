@@ -72,7 +72,7 @@ $tweets = mysqli_query($db, $sql) or die(mysqli_error());
       <div class="col-md-4 col-md-offset-4 content-margin-top">
         <?php if($tweet = mysqli_fetch_assoc($tweets)): ?>
         <div class="msg">
-          <img src="<?php echo h($tweet['picture_path']); ?>" width="100" height="100">
+          <img src="member_picture/<?php echo h($tweet['picture_path']); ?>" width="100" height="100">
           <p>投稿者 : <span class="name"><?php echo h($tweet['nick_name']); ?></span></p>
           <p>
             つぶやき : <br>
