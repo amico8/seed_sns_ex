@@ -2,6 +2,11 @@
 session_start();
 require('dbconnect.php');
 
+// htmlspecialcharsのショートカット
+function h($value){
+  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
 // tweet_idがパラメータになかったらindex.phpを表示する
 if (empty($_REQUEST['tweet_id'])) {
   header('Location: index.php');
@@ -67,14 +72,14 @@ $tweets = mysqli_query($db, $sql) or die(mysqli_error());
       <div class="col-md-4 col-md-offset-4 content-margin-top">
         <?php if($tweet = mysqli_fetch_assoc($tweets)): ?>
         <div class="msg">
-          <img src="member_picture/<?php echo htmlspecialchars($tweet['picture_path'], ENT_QUOTES, 'UTF-8'); ?>" width="100" height="100">
-          <p>投稿者 : <span class="name"><?php echo htmlspecialchars($tweet['nick_name'], ENT_QUOTES, 'UTF-8'); ?></span></p>
+          <img src="<?php echo h($tweet['picture_path']); ?>" width="100" height="100">
+          <p>投稿者 : <span class="name"><?php echo h($tweet['nick_name']); ?></span></p>
           <p>
             つぶやき : <br>
-            <?php echo htmlspecialchars($tweet['tweet'], ENT_QUOTES, 'UTF-8'); ?>
+            <?php echo h($tweet['tweet']); ?>
           </p>
           <p class="day">
-            <?php echo htmlspecialchars($tweet['created'], ENT_QUOTES, 'UTF-8'); ?>
+            <?php echo h($tweet['created']); ?>
             [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
