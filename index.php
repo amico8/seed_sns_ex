@@ -25,9 +25,10 @@ if (isset($_SESSION['member_id']) && $_SESSION['time'] + 3600 > time()) {
 if (!empty($_POST)) {
   // つぶやきが空じゃなかったらDBに登録
   if ($_POST['tweet'] != '') {
-    $sql = sprintf('INSERT INTO `tweets` SET `tweet`="%s",`member_id`=%d,`created`=now()',
+    $sql = sprintf('INSERT INTO `tweets` SET `tweet`="%s",`member_id`=%d, `reply_tweet_id`=%d, `created`=now()',
     mysqli_real_escape_string($db, $_POST['tweet']),
-    mysqli_real_escape_string($db, $member['member_id'])
+    mysqli_real_escape_string($db, $member['member_id']),
+    mysqli_real_escape_string($db, $_POST['reply_tweet_id'])
     );
 
     mysqli_query($db, $sql) or die(mysqli_error());
@@ -94,7 +95,7 @@ if (isset($_REQUEST['res'])) {
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="index.html"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
+              <a class="navbar-brand" href="index.php"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -118,6 +119,7 @@ if (isset($_REQUEST['res'])) {
               <div class="col-sm-8">
                   <?php if(isset($_REQUEST['res'])): ?>
                   <textarea name="tweet" cols="50" rows="5" class="form-control" placeholder="例：Hello World!"><?php echo htmlspecialchars($tweet, ENT_QUOTES, 'UTF-8'); ?></textarea>
+                  <input type="hidden" name="reply_tweet_id" value="<?php echo htmlspecialchars($_REQUEST['res'], ENT_QUOTES, 'UTF-8'); ?>">
                   <?php else: ?>
                   <textarea name="tweet" cols="50" rows="5" class="form-control" placeholder="例：Hello World!"></textarea>
                   <?php endif; ?>
