@@ -48,6 +48,20 @@ if (!empty($_POST)) {
   }
 }
 
+// ページング処理
+$page = '';
+// URLに?page=2などのパラメータがある場合、それを取得して$pageに格納
+if (isset($_REQUEST['page'])) {
+  $page = $_REQUEST['page'];
+}
+if ($page == '') {
+  $page = 1;
+}
+// max関数：()内に指定した複数のデータから、一番大きい値を取得する
+// もしユーザーがURLに?page=0.8のような値を入れてリクエストした場合に、強制的に1ページ目にとぶように処理している
+$page = max($page, 1);
+
+
 // 投稿を取得する
 $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id ORDER BY t.created DESC');
 $tweets = mysqli_query($db,$sql) or die(mysqli_error($db));
@@ -138,9 +152,9 @@ if (isset($_REQUEST['res'])) {
           <ul class="paging">
             <input type="submit" class="btn btn-info" value="つぶやく">
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <li><a href="index.html" class="btn btn-default">前</a></li>
+                <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                <li><a href="index.html" class="btn btn-default">次</a></li>
+                <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
           </ul>
         </form>
       </div>
