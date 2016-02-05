@@ -61,9 +61,28 @@ if ($page == '') {
 // もしユーザーがURLに?page=0.8のような値を入れてリクエストした場合に、強制的に1ページ目にとぶように処理している
 $page = max($page, 1);
 
+// ①必要なページ数を計算する
+// SELECT COUNTを使ってtweetsテーブルのデータ件数を取得
+$sql = 'SELECT COUNT(*) AS cnt FROM tweets';
+$recordSet = mysqli_query($db,$sql) or die(mysqli_error($db));
+$table = mysqli_fetch_assoc($recordSet);
+// ceil()関数（シール）：切り上げ
+// 1ページに表示したいのは最大5件のため、5で割る
+// min関数：()内に指定した複数のデータから、一番小さい値を取得する
+// ユーザが指定したページ数が最大ページ数内であるかどうか、超えていたら最大ページ数にするようmin関数を使う
+$maxPage = ceil($table['cnt'] / 5);
+
+// ②表示する正しいページをセットする
+$page = min($page, $maxPage);
+
+// ③ページに表示する件数だけ取得する
+$start = ($page - 1) * 5;
+$start = max(0, $start);
 
 // 投稿を取得する
-$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id ORDER BY t.created DESC');
+$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id ORDER BY t.created DESC LIMIT %d, 5',
+  $start
+);
 $tweets = mysqli_query($db,$sql) or die(mysqli_error($db));
 
 // while ($tweet = mysqli_fetch_assoc($tweets)) {
@@ -152,9 +171,17 @@ if (isset($_REQUEST['res'])) {
           <ul class="paging">
             <input type="submit" class="btn btn-info" value="つぶやく">
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
+                <?php if($page > 1): ?>
+                  <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
+                <?php else: ?>
+                  <li>前</li>
+                <?php endif; ?>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
+                <?php if($page < $maxPage): ?>
+                  <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
+                <?php else: ?>
+                  <li>次</li>
+                <?php endif; ?>
           </ul>
         </form>
       </div>
