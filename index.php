@@ -199,10 +199,12 @@ if (isset($_REQUEST['res'])) {
             <a href="view.php?tweet_id=<?php echo h($tweet['tweet_id']); ?>">
               <?php echo h($tweet['created']); ?>
             </a>
-            <?php if($tweet['reply_tweet_id'] > 0): ?>
+          <?php if($tweet['reply_tweet_id'] > 0): ?>
             <a href="view.php?tweet_id=<?php echo h($tweet['reply_tweet_id']); ?>"> | 返信元のつぶやき</a>
           <?php endif; ?>
-            [<a href="#" style="color: #00994C;">編集</a>]
+          <?php if($_SESSION['member_id'] == $tweet['member_id']): ?>
+            [<a href="edit.php?tweet_id=<?php echo h($tweet['tweet_id']); ?>" style="color: #00994C;">編集</a>]
+          <?php endif; ?>
           <?php if($_SESSION['member_id'] == $tweet['member_id']): ?>
             [<a href="delete.php?tweet_id=<?php echo h($tweet['tweet_id']); ?>" style="color: #F33;">削除</a>]
           <?php endif; ?>
