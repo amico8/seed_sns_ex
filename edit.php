@@ -18,6 +18,20 @@ $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t
   mysqli_real_escape_string($db, $_REQUEST['tweet_id']));
 $tweets = mysqli_query($db, $sql) or die(mysqli_error());
 
+// 編集ボタンクリック時、DBにつぶやき内容を更新
+if (isset($_POST) && !empty($_POST)) {
+  if ($_POST['tweet'] != '') {
+    $sql = sprintf('UPDATE `tweets` SET `tweet`="%s" WHERE `tweet_id` = 31',
+      mysqli_real_escape_string($db, $_POST['tweet'])
+    );
+    mysqli_query($db, $sql) or die(mysqli_error($db));
+
+    // 更新出来たらindex.phpへ
+    header('Location: index.php');
+    exit();
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
