@@ -34,7 +34,7 @@ if (isset($_SESSION['member_id']) && $_SESSION['time'] + 3600 > time()) {
 // 投稿するボタンクリック時
 if (!empty($_POST)) {
   // つぶやきが空じゃなかったらDBに登録
-  if ($_POST['tweet'] != '') {
+  if (isset($_POST['tweet']) && $_POST['tweet'] != '') {
     $sql = sprintf('INSERT INTO `tweets` SET `tweet`="%s",`member_id`=%d, `reply_tweet_id`=%d, `created`=now()',
     mysqli_real_escape_string($db, $_POST['tweet']),
     mysqli_real_escape_string($db, $member['member_id']),
@@ -79,10 +79,19 @@ $page = min($page, $maxPage);
 $start = ($page - 1) * 5;
 $start = max(0, $start);
 
-// 投稿を取得する
-$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id ORDER BY t.created DESC LIMIT %d, 5',
-  $start
-);
+// 検索ボタンクリック時
+if (isset($_POST['search_word']) && $_POST['search_word'] != '') {
+  $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id AND t.tweet LIKE "%%%s%%" ORDER BY t.created DESC LIMIT %d, 5',
+    mysqli_real_escape_string($db, $_POST['search_word']),
+    $start
+  );
+} else {
+  // 投稿を取得する
+  $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id ORDER BY t.created DESC LIMIT %d, 5',
+    $start
+  );
+}
+
 $tweets = mysqli_query($db,$sql) or die(mysqli_error($db));
 
 // while ($tweet = mysqli_fetch_assoc($tweets)) {
@@ -187,6 +196,14 @@ if (isset($_REQUEST['res'])) {
       </div>
 
       <div class="col-md-8 content-margin-top">
+      <form method="post" action="" class="form-horizontal" role="form">
+      <?php if(isset($_POST['search_word']) && !empty($_POST['search_word'])): ?>
+        <input type="text" name="search_word" value="<?php echo h($_POST['search_word']); ?>">&nbsp;&nbsp;
+      <?php else: ?>
+        <input type="text" name="search_word" value="">&nbsp;&nbsp;
+      <?php endif; ?>
+        <input type="submit" class="btn btn-success btn-xs" value="検索">
+      </form>
       <?php while($tweet = mysqli_fetch_assoc($tweets)): ?>
         <div class="msg">
           <img src="member_picture/<?php echo h($tweet['picture_path']); ?>" width="48" height="48">
