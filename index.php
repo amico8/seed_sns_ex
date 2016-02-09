@@ -63,7 +63,14 @@ $page = max($page, 1);
 
 // ①必要なページ数を計算する
 // SELECT COUNTを使ってtweetsテーブルのデータ件数を取得
-$sql = 'SELECT COUNT(*) AS cnt FROM tweets';
+if (isset($_REQUEST['search_word']) && $_REQUEST['search_word'] != '') {
+  $sql = sprintf('SELECT COUNT(*) AS cnt FROM tweets WHERE tweet LIKE "%%%s%%"',
+    mysqli_real_escape_string($db, $_REQUEST['search_word'])
+  );
+} else {
+  $sql = 'SELECT COUNT(*) AS cnt FROM tweets';
+}
+
 $recordSet = mysqli_query($db,$sql) or die(mysqli_error($db));
 $table = mysqli_fetch_assoc($recordSet);
 // ceil()関数（シール）：切り上げ
@@ -80,9 +87,9 @@ $start = ($page - 1) * 5;
 $start = max(0, $start);
 
 // 検索ボタンクリック時
-if (isset($_POST['search_word']) && $_POST['search_word'] != '') {
+if (isset($_REQUEST['search_word']) && $_REQUEST['search_word'] != '') {
   $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM members m, tweets t WHERE m.member_id = t.member_id AND t.tweet LIKE "%%%s%%" ORDER BY t.created DESC LIMIT %d, 5',
-    mysqli_real_escape_string($db, $_POST['search_word']),
+    mysqli_real_escape_string($db, $_REQUEST['search_word']),
     $start
   );
 } else {
@@ -179,30 +186,37 @@ if (isset($_REQUEST['res'])) {
             </div>
           <ul class="paging">
             <input type="submit" class="btn btn-info" value="つぶやく">
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <?php if($page > 1): ?>
-                  <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
-                <?php else: ?>
-                  <li>前</li>
-                <?php endif; ?>
-                &nbsp;&nbsp;|&nbsp;&nbsp;
-                <?php if($page < $maxPage): ?>
-                  <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
-                <?php else: ?>
-                  <li>次</li>
-                <?php endif; ?>
           </ul>
         </form>
       </div>
 
       <div class="col-md-8 content-margin-top">
-      <form method="post" action="" class="form-horizontal" role="form">
-      <?php if(isset($_POST['search_word']) && !empty($_POST['search_word'])): ?>
-        <input type="text" name="search_word" value="<?php echo h($_POST['search_word']); ?>">&nbsp;&nbsp;
-      <?php else: ?>
-        <input type="text" name="search_word" value="">&nbsp;&nbsp;
-      <?php endif; ?>
-        <input type="submit" class="btn btn-success btn-xs" value="検索">
+      <!-- あいまい検索 -->
+      <form method="get" action="" class="form-horizontal" role="form">
+        <?php if(isset($_REQUEST['search_word']) && !empty($_REQUEST['search_word'])): ?>
+          <input type="text" name="search_word" value="<?php echo h($_REQUEST['search_word']); ?>">&nbsp;&nbsp;
+        <?php else: ?>
+          <input type="text" name="search_word" value="">&nbsp;&nbsp;
+        <?php endif; ?>
+          <input type="submit" class="btn btn-success btn-xs" value="検索">
+          &nbsp;&nbsp;&nbsp;&nbsp;
+        <?php
+        $word = '';
+        if (isset($_REQUEST['search_word'])) {
+          $word = '&search_word=' . $_REQUEST['search_word'];
+        }
+        ?>
+        <?php if($page > 1): ?>
+          <li><a href="index.php?page=<?php print($page-1); ?><?php print $word; ?>" class="btn btn-default">前</a></li>
+        <?php else: ?>
+          <li>前</li>
+        <?php endif; ?>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+        <?php if($page < $maxPage): ?>
+          <li><a href="index.php?page=<?php print($page+1); ?><?php print $word; ?>" class="btn btn-default">次</a></li>
+        <?php else: ?>
+          <li>次</li>
+        <?php endif; ?>
       </form>
       <?php while($tweet = mysqli_fetch_assoc($tweets)): ?>
         <div class="msg">
